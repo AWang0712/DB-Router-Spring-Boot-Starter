@@ -10,11 +10,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @description: hash route strategy
- * @author Allan
  */
 public class DBRouterStrategyHashCode implements IDBRouterStrategy {
 
-    private Logger logger = LoggerFactory.getLogger(DBRouterStrategyHashCode.class);
+    private Logger logger = LoggerFactory.getLogger(DBRouterJoinPoint.class);
 
     private DBRouterConfig dbRouterConfig;
 
@@ -26,37 +25,17 @@ public class DBRouterStrategyHashCode implements IDBRouterStrategy {
     public void doRouter(String dbKeyAttr) {
         int size = dbRouterConfig.getDbCount() * dbRouterConfig.getTbCount();
 
-        // perturbation function:
+        // Perturbation function
         int idx = (size - 1) & (dbKeyAttr.hashCode() ^ (dbKeyAttr.hashCode() >>> 16));
 
-        // database index and table index;
+        // index of db and tb
         int dbIdx = idx / dbRouterConfig.getTbCount() + 1;
         int tbIdx = idx - dbRouterConfig.getTbCount() * (dbIdx - 1);
 
         // set to ThreadLocal
         DBContextHolder.setDBKey(String.format("%02d", dbIdx));
         DBContextHolder.setTBKey(String.format("%03d", tbIdx));
-        logger.debug("database router dbIdx：{} tbIdx：{}",  dbIdx, tbIdx);
-    }
-
-    @Override
-    public void setDBKey(int dbIdx) {
-        DBContextHolder.setDBKey(String.format("%02d", dbIdx));
-    }
-
-    @Override
-    public void setTBKey(int tbIdx) {
-        DBContextHolder.setTBKey(String.format("%03d", tbIdx));
-    }
-
-    @Override
-    public int dbCount() {
-        return dbRouterConfig.getDbCount();
-    }
-
-    @Override
-    public int tbCount() {
-        return dbRouterConfig.getTbCount();
+        logger.debug("db router dbIdx：{} tbIdx：{}",  dbIdx, tbIdx);
     }
 
     @Override
@@ -66,4 +45,5 @@ public class DBRouterStrategyHashCode implements IDBRouterStrategy {
     }
 
 }
+
 
