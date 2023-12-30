@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DBRouterStrategyHashCode implements IDBRouterStrategy {
 
-    private Logger logger = LoggerFactory.getLogger(DBRouterJoinPoint.class);
+    private Logger logger = LoggerFactory.getLogger(DBRouterStrategyHashCode.class);
 
     private DBRouterConfig dbRouterConfig;
 
@@ -36,6 +36,26 @@ public class DBRouterStrategyHashCode implements IDBRouterStrategy {
         DBContextHolder.setDBKey(String.format("%02d", dbIdx));
         DBContextHolder.setTBKey(String.format("%03d", tbIdx));
         logger.debug("db router dbIdx：{} tbIdx：{}",  dbIdx, tbIdx);
+    }
+
+    @Override
+    public void setDBKey(int dbIdx) {
+        DBContextHolder.setDBKey(String.format("%02d", dbIdx));
+    }
+
+    @Override
+    public void setTBKey(int tbIdx) {
+        DBContextHolder.setTBKey(String.format("%03d", tbIdx));
+    }
+
+    @Override
+    public int dbCount() {
+        return dbRouterConfig.getDbCount();
+    }
+
+    @Override
+    public int tbCount() {
+        return dbRouterConfig.getTbCount();
     }
 
     @Override

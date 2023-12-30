@@ -4,6 +4,7 @@ package com.allanwang.middleware.db.router.util;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.PropertyResolver;
